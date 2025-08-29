@@ -3,9 +3,9 @@ from .models import User, Province, CityMunicipality, Address, OTPVerification
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ['email', 'first_name', 'last_name', 'phone', 'sex', 'is_email_verified']
+    list_display = ['email', 'first_name', 'last_name', 'contact_number', 'sex', 'is_email_verified']
     list_filter = ['sex', 'is_email_verified', 'date_joined']
-    search_fields = ['email', 'first_name', 'last_name', 'phone']
+    search_fields = ['email', 'first_name', 'last_name', 'contact_number']
     readonly_fields = ['date_joined', 'last_login']
 
 @admin.register(Province)

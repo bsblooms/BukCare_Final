@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import GradientButton from "../components/GradientButton";
 import { validateEmail, validatePassword } from "../utils/validation";
 
@@ -11,6 +11,8 @@ export default function SignIn() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -20,7 +22,6 @@ export default function SignIn() {
       setError("Please enter a valid email address");
       return;
     }
-
     if (!validatePassword(password)) {
       setError("Password must be at least 6 characters");
       return;
@@ -29,7 +30,7 @@ export default function SignIn() {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/auth/signin/", {
+      const response = await fetch("http://localhost:8000/api/auth/login/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -38,10 +39,16 @@ export default function SignIn() {
       const data = await response.json();
       if (response.ok) {
         console.log("Sign in successful:", data);
-        // Example: localStorage.setItem("token", data.token);
-        // Example: navigate("/dashboard");
+
+        // Save JWT tokens (from backend)
+        localStorage.setItem("accessToken", data.access);
+        localStorage.setItem("refreshToken", data.refresh);
+
+        // Redirect to dashboard (or homepage)
+        
+        navigate("/patient/home");
       } else {
-        setError(data.message || "Invalid credentials");
+        setError(data.detail || "Invalid credentials");
       }
     } catch (err) {
       setError("Network error. Please try again.");
@@ -53,7 +60,9 @@ export default function SignIn() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center text-blue-600 mb-6">Sign In to BukCare</h2>
+        <h2 className="text-3xl font-bold text-center text-blue-600 mb-6">
+          Sign In to BukCare
+        </h2>
 
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm mb-4">
@@ -64,7 +73,9 @@ export default function SignIn() {
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Email */}
           <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">Email</label>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Email
+            </label>
             <div className="relative">
               <Mail className="absolute top-3 left-3 text-gray-400" size={20} />
               <input
@@ -81,7 +92,9 @@ export default function SignIn() {
 
           {/* Password */}
           <div>
-            <label className="block mb-1 text-sm font-medium text-gray-700">Password</label>
+            <label className="block mb-1 text-sm font-medium text-gray-700">
+              Password
+            </label>
             <div className="relative">
               <Lock className="absolute top-3 left-3 text-gray-400" size={20} />
               <input

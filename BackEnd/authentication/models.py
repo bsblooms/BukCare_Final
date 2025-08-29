@@ -8,16 +8,16 @@ class User(AbstractUser):
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30)
     middle_name = models.CharField(max_length=30, blank=True, null=True)  # Optional middle name
-    last_name = models.CharField(max_length=30)
-    phone = models.CharField(max_length=15, blank=True)
-    is_email_verified = models.BooleanField(default=False)
+    last_name = models.CharField(max_length=30)  
+    contact_number = models.CharField(max_length=15, blank=True)
     sex = models.CharField(max_length=1, choices=[('M', 'Male'), ('F', 'Female')], blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
-    contact_number = models.CharField(max_length=15, blank=True)
     address = models.ForeignKey('Address', on_delete=models.SET_NULL, null=True, blank=True)
+    is_email_verified = models.BooleanField(default=False)
+    
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
+    REQUIRED_FIELDS = ['first_name', 'last_name']
 
 class Province(models.Model):
     name = models.CharField(max_length=100)

@@ -1,8 +1,13 @@
 # views.py
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework import permissions
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework_simplejwt.tokens import RefreshToken
+from .serializers import LoginSerializer
 from django.utils import timezone
 from django.db import transaction
 from django.core.mail import send_mail
@@ -126,62 +131,70 @@ class CompleteSignupView(APIView):
             first_name = request.data.get("first_name")
             middle_name = request.data.get("middle_name")
             last_name = request.data.get("last_name")
-            phone = request.data.get("phone")
+            contact_number = request.data.get("contact_number")
             password = request.data.get("password")
             sex = request.data.get("sex")
             date_of_birth = request.data.get("date_of_birth")
-            contact_number = request.data.get("contact_number")
-            address_data = request.data.get("address", {})
+            
+            # Extract flat address fields
+            street = request.data.get("street")
+            barangay = request.data.get("barangay")
+            city_municipality_name = request.data.get("city_municipality")
+            province_name = request.data.get("province")
+            zip_code = request.data.get("zip_code")
             
             print(f"Received data: {request.data}")  # Debug log
             
             # Validate required fields
-            if not all([email, password, first_name, last_name, phone, sex, date_of_birth, contact_number]):
-                missing_fields = []
-                if not email: missing_fields.append("email")
-                if not password: missing_fields.append("password")
-                if not first_name: missing_fields.append("first_name")
-                if not last_name: missing_fields.append("last_name")
-                if not phone: missing_fields.append("phone")
-                if not sex: missing_fields.append("sex")
-                if not date_of_birth: missing_fields.append("date_of_birth")
-                if not contact_number: missing_fields.append("contact_number")
-                
+            required_fields = {
+                "email": email,
+                "password": password,
+                "first_name": first_name,
+                "last_name": last_name,
+                "contact_number": contact_number,
+                "sex": sex,
+                "date_of_birth": date_of_birth
+            }
+            
+            missing_fields = [field for field, value in required_fields.items() if not value]
+            if missing_fields:
                 return Response({
                     "error": f"Missing required fields: {', '.join(missing_fields)}"
                 }, status=status.HTTP_400_BAD_REQUEST)
             
             # Validate address fields
-            street = address_data.get("street")
-            barangay = address_data.get("barangay")
-            city_municipality_name = address_data.get("city_municipality")
-            province_name = address_data.get("province")
-            zip_code = address_data.get("zip_code")
+            address_fields = {
+                "street": street,
+                "barangay": barangay,
+                "city_municipality": city_municipality_name,
+                "province": province_name
+            }
             
-            if not all([street, barangay, city_municipality_name, province_name]):
-                missing_address = []
-                if not street: missing_address.append("street")
-                if not barangay: missing_address.append("barangay")
-                if not city_municipality_name: missing_address.append("city_municipality")
-                if not province_name: missing_address.append("province")
-                
+            missing_address = [field for field, value in address_fields.items() if not value]
+            if missing_address:
                 return Response({
                     "error": f"Missing address fields: {', '.join(missing_address)}"
                 }, status=status.HTTP_400_BAD_REQUEST)
             
             # Ensure OTP was verified before creating account
             if not OTPVerification.objects.filter(email=email, is_used=True).exists():
-                return Response({"error": "Email not verified. Please verify your email first."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({
+                    "error": "Email not verified. Please verify your email first."
+                }, status=status.HTTP_400_BAD_REQUEST)
             
             # Check if user already exists
             if User.objects.filter(email=email).exists():
-                return Response({"error": "User with this email already exists"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({
+                    "error": "User with this email already exists"
+                }, status=status.HTTP_400_BAD_REQUEST)
             
             # Validate date of birth format
             try:
                 dob = datetime.strptime(date_of_birth, "%Y-%m-%d").date()
             except ValueError:
-                return Response({"error": "Invalid date format for date of birth. Use YYYY-MM-DD format."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({
+                    "error": "Invalid date format for date of birth. Use YYYY-MM-DD format."
+                }, status=status.HTTP_400_BAD_REQUEST)
             
             # Use database transaction to ensure data consistency
             with transaction.atomic():
@@ -215,10 +228,9 @@ class CompleteSignupView(APIView):
                     first_name=first_name,
                     middle_name=middle_name,
                     last_name=last_name,
-                    phone=phone,
+                    contact_number=contact_number,
                     sex=sex,
                     date_of_birth=dob,
-                    contact_number=contact_number,
                     address=address,
                     is_email_verified=True
                 )
@@ -267,3 +279,27 @@ class LocationDataView(APIView):
             })
         
         return Response(data, status=status.HTTP_200_OK)
+
+class LoginView(APIView):
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.validated_data["user"]
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
+            }, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        # Add custom claims if needed
+        token['email'] = user.email
+        return token
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    permission_classes = (permissions.AllowAny,)  # ← important!
+    serializer_class = CustomTokenObtainPairSerializer

@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
 from .models import User, OTPVerification
 
@@ -19,7 +20,7 @@ class VerifyOTPSerializer(serializers.Serializer):
         email = data.get('email')
         otp = data.get('otp')
         
-        try:
+        try:    
             otp_record = OTPVerification.objects.filter(
                 email=email,
                 otp_code=otp,
@@ -73,3 +74,18 @@ class CompleteSignupSerializer(serializers.ModelSerializer):
             **validated_data
         )
         return user
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+    
+    def validate(self, data):
+        email = data.get('email')
+        password = data.get('password')
+        
+        user = authenticate(username=email, password=password)
+        if not user:
+            raise serializers.ValidationError("Invalid email or password.")
+        
+        data['user'] = user
+        return data
