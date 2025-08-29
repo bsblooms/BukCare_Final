@@ -2,10 +2,15 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Public Pages
-import Index from './pages/Index';
-import SignIn from './pages/SignIn';
-import SignUp from './pages/SignUp';
-import ForgotPassword from './pages/ForgotPassword';
+import Landing from './pages/public/Landing';
+import About from './pages/public/About';
+import Services from './pages/public/Services';
+import Contact from './pages/public/Contact';
+
+// Auth Pages
+import SignIn from './pages/auth/SignIn';
+import SignUp from './pages/auth/SignUp';
+import ForgotPassword from './pages/auth/ForgotPassword';
 
 // Patient Pages
 import PatientHome from './pages/patient/Home';
@@ -27,25 +32,33 @@ export default function App() {
     <Router>
       <Routes>
         {/* Public Pages */}
-        <Route path="/" element={<Index />} />
+        <Route path="/" element={<Landing />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/contact" element={<Contact />} />
+
+        {/* Auth Pages */}
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        {/* Patient */}
+        {/* Patient Routes */}
         <Route path="/patient/home" element={<PatientHome />} />
         <Route path="/patient/profile" element={<PatientProfile />} />
         <Route path="/patient/appointments" element={<PatientAppointments />} />
 
-        {/* Doctor */}
+        {/* Doctor Routes */}
         <Route path="/doctor/home" element={<DoctorHome />} />
         <Route path="/doctor/profile" element={<DoctorProfile />} />
         <Route path="/doctor/appointments" element={<DoctorAppointments />} />
 
-        {/* Staff */}
+        {/* Staff Routes */}
         <Route path="/staff/home" element={<StaffHome />} />
         <Route path="/staff/profile" element={<StaffProfile />} />
         <Route path="/staff/appointments" element={<StaffAppointments />} />
+
+        {/* 404 Not Found - Optional */}
+        <Route path="*" element={<Landing />} />
       </Routes>
     </Router>
   );

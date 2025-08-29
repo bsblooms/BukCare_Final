@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function Index() {
+export default function Landing() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-400 via-blue-500 to-purple-600 text-white overflow-y-auto scroll-smooth">
 
@@ -51,24 +51,33 @@ export default function Index() {
         </div>
       </section>
 
-      {/* How It Works Section */}
+      {/* Quick Navigation to Other Pages */}
       <section className="py-20 px-6">
         <h2 className="text-4xl font-bold text-center mb-12 drop-shadow-lg">
-          How It Works
+          Learn More About BukCare
         </h2>
-        <div className="grid md:grid-cols-3 gap-10 max-w-6xl mx-auto text-center">
-          <div className="bg-white/20 p-8 rounded-2xl shadow-lg hover:scale-105 transform transition duration-300">
-            <h3 className="text-xl font-semibold mb-3">Step 1: Sign Up</h3>
-            <p>Create your account easily using your email and personal details.</p>
-          </div>
-          <div className="bg-white/20 p-8 rounded-2xl shadow-lg hover:scale-105 transform transition duration-300">
-            <h3 className="text-xl font-semibold mb-3">Step 2: Choose Doctor</h3>
-            <p>Select the right doctor for your needs from our verified list.</p>
-          </div>
-          <div className="bg-white/20 p-8 rounded-2xl shadow-lg hover:scale-105 transform transition duration-300">
-            <h3 className="text-xl font-semibold mb-3">Step 3: Book Appointment</h3>
-            <p>Pick a convenient time slot and confirm your booking instantly.</p>
-          </div>
+        <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto text-center">
+          <Link
+            to="/about"
+            className="bg-white/20 p-8 rounded-2xl shadow-lg hover:scale-105 transform transition duration-300 block"
+          >
+            <h3 className="text-xl font-semibold mb-3">About Us</h3>
+            <p>Learn about our mission and healthcare vision</p>
+          </Link>
+          <Link
+            to="/services"
+            className="bg-white/20 p-8 rounded-2xl shadow-lg hover:scale-105 transform transition duration-300 block"
+          >
+            <h3 className="text-xl font-semibold mb-3">Our Services</h3>
+            <p>Discover all our healthcare services and specialties</p>
+          </Link>
+          <Link
+            to="/contact"
+            className="bg-white/20 p-8 rounded-2xl shadow-lg hover:scale-105 transform transition duration-300 block"
+          >
+            <h3 className="text-xl font-semibold mb-3">Contact Us</h3>
+            <p>Get in touch with our support team</p>
+          </Link>
         </div>
       </section>
 

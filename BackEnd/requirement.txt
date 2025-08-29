@@ -4,6 +4,7 @@ click==8.2.1
 Django==5.2.1
 django-cors-headers==4.7.0
 djangorestframework==3.16.0
+djangorestframework_simplejwt==5.5.1
 Flask==3.1.1
 Flask-SQLAlchemy==3.1.1
 greenlet==3.2.2
@@ -11,6 +12,8 @@ itsdangerous==2.2.0
 Jinja2==3.1.6
 MarkupSafe==3.0.2
 psycopg2-binary==2.9.10
+PyJWT==2.10.1
+python-dotenv==1.1.1
 SQLAlchemy==2.0.41
 sqlparse==0.5.3
 typing_extensions==4.13.2

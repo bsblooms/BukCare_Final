@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import GradientButton from "../components/GradientButton";
-import { validateEmail, validatePassword } from "../utils/validation";
+import GradientButton from "../../components/GradientButton";
+import { validateEmail, validatePassword } from "../../utils/validation";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");

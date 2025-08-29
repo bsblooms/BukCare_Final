@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Mail } from "lucide-react";
-import GradientButton from "../components/GradientButton";
+import GradientButton from "../../components/GradientButton";
 import { Link } from "react-router-dom";
-import { validateEmail } from "../utils/validation";
+import { validateEmail } from "../../utils/validation";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
