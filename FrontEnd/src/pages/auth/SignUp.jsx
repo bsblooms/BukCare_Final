@@ -2,8 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Mail, Lock, Eye, EyeOff, KeyRound, User, Phone, Calendar, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
-import GradientButton from "../../components/GradientButton";
-import { validateEmail, validatePassword, validateConfirmPassword, validatePhone, validateName } from "../../utils/validation";
+import GradientButton from "@/components/GradientButton";
+import { validateEmail, validatePassword, validateConfirmPassword, validatePhone, validateName } from "@/utils/validation";
 
 export default function SignUp() {
   const navigate = useNavigate();

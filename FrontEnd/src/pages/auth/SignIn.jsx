@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import GradientButton from "../../components/GradientButton";
-import { validateEmail, validatePassword } from "../../utils/validation";
+import GradientButton from "@/components/GradientButton";
+import { validateEmail, validatePassword } from "@/utils/validation";
+import { signIn } from "@/services/SignInAPI"; // ✅ API call
+
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -29,29 +31,19 @@ export default function SignIn() {
 
     setIsLoading(true);
 
-    try {
-      const response = await fetch("http://localhost:8000/api/auth/login/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+   try {
+      const data = await signIn(email, password); // ✅ use API function
 
-      const data = await response.json();
-      if (response.ok) {
-        console.log("Sign in successful:", data);
+      console.log("Sign in successful:", data);
 
-        // Save JWT tokens (from backend)
-        localStorage.setItem("accessToken", data.access);
-        localStorage.setItem("refreshToken", data.refresh);
+      // Save JWT tokens
+      localStorage.setItem("accessToken", data.access);
+      localStorage.setItem("refreshToken", data.refresh);
 
-        // Redirect to dashboard (or homepage)
-        
-        navigate("/patient/home");
-      } else {
-        setError(data.detail || "Invalid credentials");
-      }
+      // Redirect
+      navigate("/patient/home");
     } catch (err) {
-      setError("Network error. Please try again.");
+      setError(err.message);
     } finally {
       setIsLoading(false);
     }
