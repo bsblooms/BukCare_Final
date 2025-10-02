@@ -164,12 +164,7 @@ export default function Landing() {
             >
               Get Started
             </Link>
-            {/* <Link
-              to="/about"
-              className="bg-[#FFF5E0] border border-[#41B06E] text-[#41B06E] font-semibold px-8 py-3 rounded-xl shadow-md hover:bg-[#8DECB4]/30 transition duration-300"
-            >
-              Learn More
-            </Link> */}
+            
           </div>
         </div>
         <div class="animated-appointment-image mb-0.5">

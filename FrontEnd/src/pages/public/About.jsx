@@ -132,6 +132,7 @@ import { Link } from "react-router-dom";
 //   );
 // }
 
+
 export default function NotifyMe() {
   const notifications = [
     {
@@ -140,6 +141,7 @@ export default function NotifyMe() {
       message:
         "Your appointment with Dr. Smith has been scheduled for Sept 12, 2025 at 3:00 PM.",
       type: "scheduled",
+      status: "new",
     },
     {
       id: 2,
@@ -147,6 +149,7 @@ export default function NotifyMe() {
       message:
         "Your request for an appointment with Dr. Johnson has been approved.",
       type: "approved",
+      status: "new",
     },
     {
       id: 3,
@@ -154,6 +157,7 @@ export default function NotifyMe() {
       message:
         "Your appointment has been moved to Sept 15, 2025 at 10:00 AM.",
       type: "rescheduled",
+      status: "past",
     },
     {
       id: 4,
@@ -161,45 +165,81 @@ export default function NotifyMe() {
       message:
         "Your appointment with Dr. Lee on Sept 14, 2025 has been canceled.",
       type: "canceled",
+      status: "past",
     },
   ];
 
   const typeColors = {
-    scheduled: "border-l-4 border-[#41B06E] bg-[#FFF5E0] text-[#141E46]",
-    approved: "border-l-4 border-[#8DECB4] bg-[#FFF5E0] text-[#141E46]",
-    rescheduled: "border-l-4 border-yellow-400 bg-[#FFF5E0] text-[#141E46]",
-    canceled: "border-l-4 border-red-500 bg-[#FFF5E0] text-[#141E46]",
+    scheduled: "border-l-4 border-[#41B06E]", // green
+    approved: "border-l-4 border-[#0ea5e9]", // blue
+    rescheduled: "border-l-4 border-yellow-400", // yellow
+    canceled: "border-l-4 border-red-500", // red
   };
 
   return (
-   <div className="min-h-screen bg-gradient-to-br from-[#141E46] via-[#41B06E] to-[#8DECB4] text-[#FFF5E0] px-20 py-20">
+    <div className="min-h-screen bg-[#FFF8E7] text-gray-800 flex flex-col">
       {/* Back Button */}
-      <a href="/" className="absolute top-10 left-10 text-sm underline">
+      <a
+        href="/pages/Landing"
+        className="absolute top-6 left-6 text-sm underline text-gray-600 hover:text-gray-900"
+      >
         ← Back to Home
       </a>
 
       {/* Header */}
-      <section className="text-center py-16 bg-[#FFF5E0] text-[#141E46] rounded-b-3xl shadow-lg">
-        <h1 className="text-4xl font-extrabold">
-          Appointment <span className="text-[#41B06E]">Notifications</span>
+      <section className="text-center py-14 bg-gradient-to-r from-[#41B06E] to-[#8DECB4] text-[#141E46]">
+        <h1 className="text-4xl md:text-5xl font-extrabold">
+          Appointment <span className="text-[#141E46]">Notifications</span>
         </h1>
-        <p className="mt-4 text-lg max-w-2xl mx-auto text-[#141E46]/80">
+        <p className="mt-3 text-lg text-gray-800/80">
           Stay updated with the latest status of your medical appointments.
         </p>
       </section>
 
-      {/* Notification List */}
-      <section className="px-6 md:px-20 py-12">
-        <div className="max-w-3xl mx-auto space-y-6">
-          {notifications.map((note) => (
-            <div
-              key={note.id}
-              className={`rounded-xl shadow-md p-5 ${typeColors[note.type]}`}
-            >
-              <h2 className="text-xl font-semibold mb-1">{note.title}</h2>
-              <p className="text-sm opacity-80">{note.message}</p>
-            </div>
-          ))}
+      {/* Notifications */}
+      <section className="px-6 md:px-20 py-12 flex-1 max-w-4xl mx-auto w-full space-y-10">
+        {/* New Notifications */}
+        <div>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">
+            New Notifications
+          </h2>
+          <div className="space-y-3">
+            {notifications
+              .filter((note) => note.status === "new")
+              .map((note) => (
+                <div
+                  key={note.id}
+                  className={`flex items-center justify-between rounded-lg shadow-sm hover:shadow-md transition-all duration-200 p-4 bg-white border ${typeColors[note.type]}`}
+                >
+                  <p className="text-sm text-gray-700">
+                    <span className="font-semibold">{note.title}:</span>{" "}
+                    {note.message}
+                  </p>
+                </div>
+              ))}
+          </div>
+        </div>
+
+        {/* Past Notifications */}
+        <div>
+          <h2 className="text-xl font-bold text-gray-900 mb-4">
+            History
+          </h2>
+          <div className="space-y-3">
+            {notifications
+              .filter((note) => note.status === "past")
+              .map((note) => (
+                <div
+                  key={note.id}
+                  className={`flex items-center justify-between rounded-lg shadow-sm hover:shadow-md transition-all duration-200 p-4 bg-white border ${typeColors[note.type]}`}
+                >
+                  <p className="text-sm text-gray-600">
+                    <span className="font-semibold">{note.title}:</span>{" "}
+                    {note.message}
+                  </p>
+                </div>
+              ))}
+          </div>
         </div>
       </section>
 

@@ -1,18 +1,1 @@
-# Global ignores
-.env
-*.env
-*.log
-*.pid
-*.sock
-
-# Docker
-docker-data/
-*.db
-
-# IDE / Editor configs
-.vscode/
-.idea/
-*.swp
-
-nginx/
-Docker-Compose.yml
+node_module/ 
