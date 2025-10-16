@@ -13,7 +13,7 @@ export default function RescheduleDialog({ onConfirm }) {
       setConfirmation("⚠️ Please select a new date and time.");
       setTimeout(() => {
         setConfirmation(null);
-        navigate("/patient/appointments");
+        navigate("/staff/appointments");
       }, 2000);
       return;
     }
@@ -22,7 +22,7 @@ export default function RescheduleDialog({ onConfirm }) {
     setConfirmation("✅ Your reschedule request has been submitted!");
     setTimeout(() => {
       setConfirmation(null);
-      navigate("/patient/appointments");
+      navigate("/staff/appointments");
     }, 2000);
   };
 
@@ -30,7 +30,7 @@ export default function RescheduleDialog({ onConfirm }) {
     setConfirmation("❌ Reschedule request cancelled.");
     setTimeout(() => {
       setConfirmation(null);
-      navigate("/patient/appointments");
+      navigate("/staff/appointments");
     }, 2000);
   };
 

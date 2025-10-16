@@ -91,7 +91,7 @@ import AddAppointments from "./pages/patient/AddAppointments";
 import Appointments from "./pages/patient/Appointments";
 import NotifyMe from "./pages/patient/NotifyMe";
 import Reschedule from "./pages/patient/Reschedule";
-import AppointmentView from "./pages/patient/AppointmentView";
+import MarkAsDone from "./pages/patient/markasdone";
 
 
 
@@ -108,6 +108,7 @@ import StaffProfile from "./pages/staff/Profile";
 import StaffAppointments from "./pages/staff/Appointments";
 import StaffCreateAppointment from "./pages/staff/CreateAppointment";
 import Stafffinddoctor from "./pages/staff/finddoctor";
+import StaffReschedule from "./pages/staff/Reschedule";
 
 export default function App() {
   return (
@@ -134,7 +135,7 @@ export default function App() {
         <Route path="patient/appoitment" element={<Appointments />} />
         <Route path="patient/notifyme" element={<NotifyMe />} />
         <Route path="patient/reschedule" element={<Reschedule />} />
-        <Route path="patient/appointmentview" element={<AppointmentView />} />
+        <Route path="patient/markasdone" element={<MarkAsDone />} />
 
 
     
@@ -150,6 +151,7 @@ export default function App() {
         <Route path="/staff/appointments" element={<StaffAppointments />} />
         <Route path="/staff/createappointment" element={<StaffCreateAppointment />} />
         <Route path="/staff/finddoctor" element={<Stafffinddoctor />} />
+        <Route path="/staff/reschedule" element={<StaffReschedule />} />
 
         {/* 404 Not Found - Optional */}
         <Route path="*" element={<Landing />} />

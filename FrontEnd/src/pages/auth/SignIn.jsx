@@ -1,145 +1,9 @@
-// import { useState } from "react";
-// import { Mail, Lock, Eye, EyeOff } from "lucide-react";
-// import { Link, useNavigate } from "react-router-dom";
-// import GradientButton from "@/components/GradientButton";
-// import { validateEmail, validatePassword } from "@/utils/validation";
-// import { signIn } from "@/services/SignInAPI"; // ✅ API call
-
-
-// export default function SignIn() {
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [showPassword, setShowPassword] = useState(false);
-//   const [error, setError] = useState("");
-//   const [isLoading, setIsLoading] = useState(false);
-
-//   const navigate = useNavigate();
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setError("");
-
-//     // Frontend validation
-//     if (!validateEmail(email)) {
-//       setError("Please enter a valid email address");
-//       return;
-//     }
-//     if (!validatePassword(password)) {
-//       setError("Password must be at least 6 characters");
-//       return;
-//     }
-
-//     setIsLoading(true);
-
-//    try {
-//       const data = await signIn(email, password); // ✅ use API function
-
-//       console.log("Sign in successful:", data);
-
-//       // Save JWT tokens
-//       localStorage.setItem("accessToken", data.access);
-//       localStorage.setItem("refreshToken", data.refresh);
-
-//       // Redirect
-//       navigate("/patient/home");
-//     } catch (err) {
-//       setError(err.message);
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-//       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
-//         <h2 className="text-3xl font-bold text-center text-blue-600 mb-6">
-//           Sign In to BukCare
-//         </h2>
-
-//         {error && (
-//           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm mb-4">
-//             {error}
-//           </div>
-//         )}
-
-//         <form onSubmit={handleSubmit} className="space-y-6">
-//           {/* Email */}
-//           <div>
-//             <label className="block mb-1 text-sm font-medium text-gray-700">
-//               Email
-//             </label>
-//             <div className="relative">
-//               <Mail className="absolute top-3 left-3 text-gray-400" size={20} />
-//               <input
-//                 type="email"
-//                 value={email}
-//                 onChange={(e) => setEmail(e.target.value)}
-//                 required
-//                 placeholder="Enter your email"
-//                 className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 outline-none"
-//                 disabled={isLoading}
-//               />
-//             </div>
-//           </div>
-
-//           {/* Password */}
-//           <div>
-//             <label className="block mb-1 text-sm font-medium text-gray-700">
-//               Password
-//             </label>
-//             <div className="relative">
-//               <Lock className="absolute top-3 left-3 text-gray-400" size={20} />
-//               <input
-//                 type={showPassword ? "text" : "password"}
-//                 value={password}
-//                 onChange={(e) => setPassword(e.target.value)}
-//                 required
-//                 placeholder="Enter your password"
-//                 className="w-full pl-10 pr-10 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 outline-none"
-//                 disabled={isLoading}
-//               />
-//               <button
-//                 type="button"
-//                 onClick={() => setShowPassword(!showPassword)}
-//                 className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
-//                 disabled={isLoading}
-//               >
-//                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-//               </button>
-//             </div>
-//           </div>
-
-//           {/* Forgot Password */}
-//           <div className="text-right text-sm">
-//             <Link to="/forgot-password" className="text-blue-600 hover:underline">
-//               Forgot password?
-//             </Link>
-//           </div>
-
-//           {/* Submit Button */}
-//           <GradientButton type="submit" disabled={isLoading}>
-//             {isLoading ? "Signing In..." : "Sign In"}
-//           </GradientButton>
-//         </form>
-
-//         {/* Footer */}
-//         <p className="text-center text-sm mt-6">
-//           Don’t have an account?{" "} 
-//           <Link to="/signup" className="text-blue-600 hover:underline">
-//             Sign Up
-//           </Link>
-//         </p>
-//       </div>
-//     </div>
-//   );
-// }
 
 import { useState } from "react";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import GradientButton from "@/components/GradientButton";
 import { validateEmail, validatePassword } from "@/utils/validation";
-import { signIn } from "@/services/SignInAPI"; // ✅ API call
+import { signIn } from "@/services/SignInAPI";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -147,14 +11,12 @@ export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    // Frontend validation
     if (!validateEmail(email)) {
       setError("Please enter a valid email address");
       return;
@@ -165,17 +27,10 @@ export default function SignIn() {
     }
 
     setIsLoading(true);
-
     try {
-      const data = await signIn(email, password); // ✅ use API function
-
-      console.log("Sign in successful:", data);
-
-      // Save JWT tokens
+      const data = await signIn(email, password);
       localStorage.setItem("accessToken", data.access);
       localStorage.setItem("refreshToken", data.refresh);
-
-      // Redirect
       navigate("/patient/home");
     } catch (err) {
       setError(err.message);
@@ -185,14 +40,14 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white rounded-2xl shadow-lg w-full max-w-md overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#EAF2FF] via-white to-[#F9FBFF]">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-blue-100 overflow-hidden transition-all duration-300 hover:shadow-2xl mb-50">
         
         {/* Header */}
-        <div className="bg-green-400 text-center py-6">
-          <h2 className="text-2xl font-bold text-gray-900">Sign In to BukCare</h2>
-          <p className="text-sm text-gray-800">
-            Access your account to book appointments easily
+        <div className="bg-gradient-to-r from-[#0A2E75] to-[#0047BB] text-center py-8">
+          <h1 className="text-3xl font-bold text-white tracking-tight">BukCare</h1>
+          <p className="text-sm text-blue-100 mt-1">
+            Trusted medical appointments made easy
           </p>
         </div>
 
@@ -207,18 +62,18 @@ export default function SignIn() {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email */}
             <div>
-              <label className="block mb-1 text-sm font-medium text-gray-700">
-                Email
+              <label className="block mb-2 text-sm font-semibold text-slate-900">
+                Email Address
               </label>
               <div className="relative">
-                <Mail className="absolute top-3 left-3 text-gray-400" size={20} />
+                <Mail className="absolute top-3 left-3 text-slate-400" size={20} />
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   placeholder="Enter your email"
-                  className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 outline-none"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-[#0047BB] outline-none transition-all"
                   disabled={isLoading}
                 />
               </div>
@@ -226,24 +81,24 @@ export default function SignIn() {
 
             {/* Password */}
             <div>
-              <label className="block mb-1 text-sm font-medium text-gray-700">
+              <label className="block mb-2 text-sm font-semibold text-slate-900">
                 Password
               </label>
               <div className="relative">
-                <Lock className="absolute top-3 left-3 text-gray-400" size={20} />
+                <Lock className="absolute top-3 left-3 text-slate-400" size={20} />
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   placeholder="Enter your password"
-                  className="w-full pl-10 pr-10 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 outline-none"
+                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-gray-300 text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-[#0047BB] outline-none transition-all"
                   disabled={isLoading}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
+                  className="absolute top-3 right-3 text-slate-400 hover:text-slate-600"
                   disabled={isLoading}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -253,23 +108,33 @@ export default function SignIn() {
 
             {/* Forgot Password */}
             <div className="text-right text-sm">
-              <Link to="/forgot-password" className="text-blue-600 hover:underline">
+              <Link
+                to="/forgot-password"
+                className="text-[#0047BB] hover:text-[#0A2E75] hover:underline font-medium"
+              >
                 Forgot password?
               </Link>
             </div>
 
             {/* Submit Button */}
-            <GradientButton type="submit" disabled={isLoading}>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full py-2.5 bg-[#FFC300] hover:bg-[#FFF5CC] text-[#0A2E75] font-semibold rounded-xl transition-all duration-300 shadow-md hover:shadow-lg"
+            >
               {isLoading ? "Signing In..." : "Sign In"}
-            </GradientButton>
+            </button>
           </form>
         </div>
 
         {/* Footer */}
-        <div className="bg-blue-950 text-center py-4">
-          <p className="text-sm text-white">
+        <div className="bg-[#EAF2FF] text-center py-4 border-t border-blue-100">
+          <p className="text-sm text-slate-600">
             Don’t have an account?{" "}
-            <Link to="/signup" className="text-green-300 hover:underline">
+            <Link
+              to="/signup"
+              className="text-[#0047BB] hover:text-[#0A2E75] hover:underline font-semibold"
+            >
               Sign Up
             </Link>
           </p>
